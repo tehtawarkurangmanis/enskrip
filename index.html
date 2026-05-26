@@ -3,102 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TON X Encrypt</title>
+<title>Enskrip Deskript Teks</title>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+body {
+  background:#0f1724;
+  color:#e6eef6;
+  font-family:Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  margin:0;
 }
 
-body{
-    background:#081120;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.container{
-    width:100%;
-    max-width:420px;
-    background:#16253b;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 0 25px rgba(0,0,0,0.5);
+.container {
+  background:#1c2a3e;
+  padding:20px;
+  border-radius:12px;
+  max-width:400px;
+  width:90%;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
+  text-align:center;
 }
 
 /* LOGO */
-.logo{
-    width:120px;
-    display:block;
-    margin:0 auto 15px;
+.logo {
+  width:120px;
+  margin-bottom:10px;
+  filter: drop-shadow(0 0 10px rgba(0,183,255,0.4));
 }
 
-/* TITLE */
-h1{
-    text-align:center;
-    color:white;
-    margin-bottom:20px;
-    font-size:30px;
+textarea, input {
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border-radius:8px;
+  border:none;
+  resize:vertical;
+  background:#0b1627;
+  color:#fff;
+  box-sizing:border-box;
 }
 
-/* LABEL */
-label{
-    color:#dbeafe;
-    display:block;
-    margin-top:15px;
-    margin-bottom:8px;
-    font-size:16px;
+button {
+  margin-top:10px;
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#06b6d4;
+  color:#042026;
+  font-weight:bold;
+  cursor:pointer;
+  width:100%;
 }
 
-/* INPUT & TEXTAREA */
-textarea,
-input{
-    width:100%;
-    background:#071426;
-    border:none;
-    outline:none;
-    color:white;
-    padding:14px;
-    border-radius:12px;
-    font-size:16px;
+button:hover {
+  background:#09d0f1;
 }
 
-textarea{
-    resize:none;
+h1 {
+  text-align:center;
+  font-size:20px;
+  margin-bottom:10px;
 }
 
-/* BUTTON */
-button{
-    width:100%;
-    padding:14px;
-    margin-top:15px;
-    border:none;
-    border-radius:12px;
-    background:#12c8e8;
-    color:#03131b;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-button:hover{
-    background:#27dcff;
-}
-
-/* FOOTER */
-footer{
-    margin-top:20px;
-    text-align:center;
-    color:#94a3b8;
-    font-size:13px;
+footer {
+  text-align:center;
+  margin-top:12px;
+  font-size:12px;
+  color:#9ca3af;
 }
 
 </style>
@@ -107,92 +82,74 @@ footer{
 
 <div class="container">
 
-    <!-- LOGO -->
-    <img src="./logo.png?v=2" class="logo">
+  <!-- LOGO -->
+  <img src="logo.png" alt="TON X Logo" class="logo">
 
-    <h1>Enskrip / Deskript</h1>
+  <h1>Enskrip / Deskript</h1>
 
-    <label>Teks</label>
-    <textarea id="text" rows="5" placeholder="Masukkan teks..."></textarea>
+  <label>Teks:</label>
+  <textarea id="text" rows="5" placeholder="Masukkan teks..."></textarea>
 
-    <label>Password</label>
-    <input type="password" id="key" placeholder="Masukkan password">
+  <label>Password:</label>
+  <input type="password" id="key" placeholder="Masukkan password">
 
-    <button onclick="encryptText()">
-        🔐 Enkripsi
-    </button>
+  <button onclick="encryptText()">🔐 Enkripsi</button>
+  <button onclick="decryptText()">🔓 Dekripsi</button>
 
-    <button onclick="decryptText()">
-        🔓 Dekripsi
-    </button>
+  <label>Hasil:</label>
+  <textarea id="result" rows="5" readonly></textarea>
 
-    <label>Hasil</label>
-    <textarea id="result" rows="5" readonly></textarea>
-
-    <footer>
-        powered by ton-x cryptoiz 2025 ™
-    </footer>
-
+  <footer>powered by ton-x cryptoiz 2025 ™</footer>
 </div>
 
 <script>
 
-function encryptText(){
+function encryptText() {
+  const text = document.getElementById("text").value;
+  const key = document.getElementById("key").value;
 
-    const text = document.getElementById("text").value;
-    const key = document.getElementById("key").value;
+  if (!text || !key)
+    return alert("Isi teks dan password dulu!");
 
-    if(text === "" || key === ""){
-        alert("Isi teks dan password dulu!");
-        return;
-    }
+  let shift = key.length % 26;
+  let encrypted = "";
 
-    let shift = key.length % 26;
-    let encrypted = "";
+  for (let i = 0; i < text.length; i++) {
+    encrypted += String.fromCharCode(
+      text.charCodeAt(i) + shift
+    );
+  }
 
-    for(let i = 0; i < text.length; i++){
-        encrypted += String.fromCharCode(
-            text.charCodeAt(i) + shift
-        );
-    }
-
-    document.getElementById("result").value =
-        btoa(encrypted);
+  document.getElementById("result").value = btoa(encrypted);
 }
 
-function decryptText(){
+function decryptText() {
+  const text = document.getElementById("text").value;
+  const key = document.getElementById("key").value;
 
-    const text = document.getElementById("text").value;
-    const key = document.getElementById("key").value;
+  if (!text || !key)
+    return alert("Isi teks dan password dulu!");
 
-    if(text === "" || key === ""){
-        alert("Isi teks dan password dulu!");
-        return;
-    }
+  let shift = key.length % 26;
+  let decoded;
 
-    let decoded;
+  try {
+    decoded = atob(text);
+  } catch (e) {
+    return alert("Data bukan format enkripsi yang valid!");
+  }
 
-    try{
-        decoded = atob(text);
-    }catch{
-        alert("Format enkripsi tidak valid!");
-        return;
-    }
+  let decrypted = "";
 
-    let shift = key.length % 26;
-    let decrypted = "";
+  for (let i = 0; i < decoded.length; i++) {
+    decrypted += String.fromCharCode(
+      decoded.charCodeAt(i) - shift
+    );
+  }
 
-    for(let i = 0; i < decoded.length; i++){
-        decrypted += String.fromCharCode(
-            decoded.charCodeAt(i) - shift
-        );
-    }
-
-    document.getElementById("result").value =
-        decrypted;
+  document.getElementById("result").value = decrypted;
 }
 
 </script>
-
 </body>
 </html>
